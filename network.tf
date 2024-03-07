@@ -131,7 +131,7 @@ resource "aws_route_table_association" "rta-deveqi-private-b" {
 
 resource "aws_security_group" "sg-deveqi" {
   name        = "sg_deveqi_api"
-  description = "Permitir porta 22"
+  description = "Security group that allows ssh/https and all egress traffic"
   vpc_id      = aws_vpc.vpc_deveqi.id
 
   ingress {
@@ -250,4 +250,36 @@ resource "aws_lb_listener" "front_end" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.lbtg.arn
   }
+}
+
+
+resource "aws_security_group" "autoscaling" {
+  name        = "autoscaling"
+  description = "Security group auto scaling"
+  vpc_id      = aws_vpc.vpc_deveqi.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
+   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups = [ aws_security_group.alb.id ]
+
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+
 }
