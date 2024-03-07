@@ -14,8 +14,12 @@ output "alb_id" {
   value = aws_lb.alb.id
 }
 
-output "subnet_id" {
+output "subnet_ida1" {
   value = aws_subnet.deveqi-public-a.id
+
+}
+output "subnet_ida2" {
+  value = aws_subnet.deveqi-public-b.id
 
 }
 
@@ -26,5 +30,5 @@ output "vpc_id" {
 output "autoscaling_sgid" {
 
   value = aws_security_group.autoscaling.id
-  
+
 }
